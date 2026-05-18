@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Enchanted Gallery</title>
+
+    <style>
+        @font-face {
+            font-family: '1589_Humane_Bordeaux';
+            src: url('https://www.melaniemartinezmusic.com/sites/g/files/g2000021306/files/2026-01/1589_Humane_Bordeaux_0.woff2') format('woff2');
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow-x: hidden;
+            min-height: 100vh;
+            background:
+                linear-gradient(rgba(0, 0, 0, .55), rgba(0, 0, 0, .75)),
+                url('https://images.unsplash.com/photo-1518895949257-7621c3c786d7?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: '1589_Humane_Bordeaux', sans-serif;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at top left, rgba(255, 182, 193, .35), transparent 25%),
+                radial-gradient(circle at bottom right, rgba(255, 20, 147, .22), transparent 30%),
+                radial-gradient(circle at center, rgba(255, 105, 180, .12), transparent 35%);
+            mix-blend-mode: screen;
+            pointer-events: none;
+        }
+
+        #InitalVideo_onetime {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: black;
+        }
+
+        .mm_intro_video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .vid_mob {
+            display: none;
+        }
+
+        @media(max-width:900px) {
+
+            .vid_desktop {
+                display: none;
+            }
+
+            .vid_mob {
+                display: block;
+            }
+        }
+
+        #collage_container {
+            display: none;
+            width: 100%;
+            min-height: 100vh;
+            padding: 70px 0 250px;
+            position: relative;
+        }
+
+        .collage_title {
+            text-align: center;
+            color: #ffd6ea;
+            font-size: clamp(3rem, 10vw, 8rem);
+            letter-spacing: 12px;
+            text-transform: uppercase;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: 2s ease;
+            position: relative;
+            z-index: 5;
+
+            text-shadow:
+                0 0 10px #ff9ed1,
+                0 0 20px #ff77b7,
+                0 0 45px #ff1493;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #ffe4f1;
+            letter-spacing: 6px;
+            margin-top: 15px;
+            opacity: .7;
+            font-size: 1rem;
+            position: relative;
+            z-index: 5;
+        }
+
+        .collage_grid {
+            position: relative;
+            width: 100%;
+            max-width: 1800px;
+            height: 2600px;
+            margin: auto;
+            margin-top: 120px;
+        }
+
+        .collage_grid img {
+            position: absolute;
+            width: 300px;
+            border-radius: 24px;
+            object-fit: cover;
+            opacity: 0;
+            cursor: pointer;
+
+            border: 2px solid rgba(255, 255, 255, .15);
+
+            transform: scale(.5) rotate(-10deg);
+
+            transition:
+                transform .9s cubic-bezier(.17, .89, .32, 1.49),
+                box-shadow .9s ease,
+                filter .9s ease;
+
+            filter:
+                brightness(.92) saturate(1.15) contrast(1.08);
+
+            box-shadow:
+                0 0 15px rgba(255, 182, 193, .4),
+                0 0 40px rgba(255, 20, 147, .25),
+                0 0 90px rgba(255, 20, 147, .15);
+        }
+
+        .collage_grid img:hover {
+
+            transform:
+                scale(1.08) rotate(0deg) translateY(-12px) !important;
+
+            z-index: 999;
+
+            filter:
+                brightness(1.08) saturate(1.3);
+
+            box-shadow:
+                0 0 20px #ffb6d5,
+                0 0 50px #ff77b7,
+                0 0 120px #ff1493;
+        }
+
+        .reveal {
+            opacity: 1 !important;
+        }
+
+        .collage_grid img:nth-child(1) {
+            top: 0;
+            left: 2%;
+            transform: rotate(-14deg);
+        }
+
+        .collage_grid img:nth-child(2) {
+            top: 90px;
+            left: 28%;
+            transform: rotate(12deg);
+        }
+
+        .collage_grid img:nth-child(3) {
+            top: -40px;
+            right: 8%;
+            transform: rotate(-7deg);
+        }
+
+        .collage_grid img:nth-child(4) {
+            top: 420px;
+            left: 10%;
+            transform: rotate(9deg);
+        }
+
+        .collage_grid img:nth-child(5) {
+            top: 330px;
+            left: 48%;
+            transform: rotate(-15deg);
+        }
+
+        .collage_grid img:nth-child(6) {
+            top: 520px;
+            right: 3%;
+            transform: rotate(6deg);
+        }
+
+        .collage_grid img:nth-child(7) {
+            top: 850px;
+            left: 0%;
+            transform: rotate(-12deg);
+        }
+
+        .collage_grid img:nth-child(8) {
+            top: 760px;
+            left: 34%;
+            transform: rotate(10deg);
+        }
+
+        .collage_grid img:nth-child(9) {
+            top: 960px;
+            right: 10%;
+            transform: rotate(-8deg);
+        }
+
+        .collage_grid img:nth-child(10) {
+            top: 1250px;
+            left: 15%;
+            transform: rotate(14deg);
+        }
+
+        .collage_grid img:nth-child(11) {
+            top: 1180px;
+            left: 44%;
+            transform: rotate(-10deg);
+        }
+
+        .collage_grid img:nth-child(12) {
+            top: 1380px;
+            right: 0%;
+            transform: rotate(8deg);
+        }
+
+        .collage_grid img:nth-child(13) {
+            top: 1750px;
+            left: 4%;
+            transform: rotate(-15deg);
+        }
+
+        .collage_grid img:nth-child(14) {
+            top: 1650px;
+            left: 36%;
+            transform: rotate(12deg);
+        }
+
+        .collage_grid img:nth-child(15) {
+            top: 1880px;
+            right: 6%;
+            transform: rotate(-7deg);
+        }
+
+        .collage_grid img:nth-child(16) {
+            top: 2200px;
+            left: 18%;
+            transform: rotate(9deg);
+        }
+
+        .collage_grid img:nth-child(17) {
+            top: 2120px;
+            left: 55%;
+            transform: rotate(-13deg);
+        }
+
+        .collage_grid img:nth-child(18) {
+            top: 2360px;
+            right: 12%;
+            transform: rotate(6deg);
+        }
+
+        #imageModal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, .92);
+            backdrop-filter: blur(10px);
+            z-index: 999999;
+        }
+
+        #imageModal img {
+            max-width: 80%;
+            max-height: 85%;
+            border-radius: 24px;
+
+            box-shadow:
+                0 0 20px #ffb6d5,
+                0 0 50px #ff77b7,
+                0 0 120px #ff1493;
+        }
+
+        .closeModal {
+            position: absolute;
+            top: 25px;
+            right: 40px;
+            color: white;
+            font-size: 4rem;
+            cursor: pointer;
+        }
+
+        .glitter {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: white;
+            pointer-events: none;
+            opacity: .7;
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+
+            from {
+                transform:
+                    translateY(100vh) scale(.4);
+            }
+
+            to {
+                transform:
+                    translateY(-120vh) scale(1.5);
+            }
+        }
+
+        @media(max-width:768px) {
+
+            .collage_grid {
+                height: 5200px;
+            }
+
+            .collage_grid img {
+                width: 42vw;
+            }
+
+            .collage_grid img:nth-child(odd) {
+                left: 4% !important;
+                right: auto !important;
+            }
+
+            .collage_grid img:nth-child(even) {
+                right: 4% !important;
+                left: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="InitalVideo_onetime">
+
+        <video class="mm_intro_video vid_desktop" id="videoPC" autoplay muted>
+            <source src="https://d2cstorage-a.akamaihd.net/atl/janmon/desktoploading_NEW.mp4" type="video/mp4">
+        </video>
+
+        <video class="mm_intro_video vid_mob" id="videoMOB" autoplay muted playsinline>
+            <source src="https://d2cstorage-a.akamaihd.net/atl/janmon/loading_mobile.mp4" type="video/mp4">
+        </video>
+
+    </div>
+
+    <div id="collage_container">
+
+        <div class="collage_title" id="main_title">
+            TQM NAT
+        </div>
+
+        <div class="subtitle">
+            ✧ Melani Martinez ✧
+        </div>
+
+        <div class="collage_grid">
+
+            <img src="propiedades/img1.jpeg">
+            <img src="propiedades/img2.jpeg">
+            <img src="propiedades/img3.jpeg">
+            <img src="propiedades/img4.jpeg">
+            <img src="propiedades/img5.jpeg">
+            <img src="propiedades/img6.jpeg">
+            <img src="propiedades/img7.jpeg">
+            <img src="propiedades/img8.jpeg">
+            <img src="propiedades/img9.jpeg">
+            <img src="propiedades/img10.jpeg">
+            <img src="propiedades/img11.jpeg">
+            <img src="propiedades/img12.jpeg">
+            <img src="propiedades/img13.jpeg">
+            <img src="propiedades/img14.jpeg">
+            <img src="propiedades/img15.jpeg">
+            <img src="propiedades/img16.jpeg">
+            <img src="propiedades/img17.jpeg">
+            <img src="propiedades/img18.jpeg">
+
+        </div>
+
+    </div>
+
+    <div id="imageModal">
+
+        <span class="closeModal">&times;</span>
+
+        <img id="modalImg">
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+
+        for (let i = 0; i < 120; i++) {
+
+            let glitter = document.createElement('div');
+
+            glitter.classList.add('glitter');
+
+            glitter.style.left = Math.random() * 100 + 'vw';
+
+            glitter.style.animationDuration =
+                (5 + Math.random() * 10) + 's';
+
+            glitter.style.animationDelay =
+                Math.random() * 5 + 's';
+
+            glitter.style.opacity = Math.random();
+
+            glitter.style.background =
+                Math.random() > .5 ? '#ffb6d5' : '#ffffff';
+
+            document.body.appendChild(glitter);
+        }
+
+        $(document).ready(function () {
+
+            var video = window.innerWidth <= 900
+                ? document.getElementById('videoMOB')
+                : document.getElementById('videoPC');
+
+            function startGallery() {
+
+                $("#InitalVideo_onetime").fadeOut(2200, function () {
+
+                    $(this).remove();
+
+                    $("#collage_container").fadeIn(1800);
+
+                    $("body").css("overflow-y", "visible");
+
+                    setTimeout(function () {
+
+                        $("#main_title").css({
+                            opacity: "1",
+                            transform: "translateY(0)"
+                        });
+
+                    }, 300);
+
+                    $(".collage_grid img").each(function (index) {
+
+                        let img = $(this);
+
+                        setTimeout(function () {
+
+                            img.addClass("reveal");
+
+                            img.css({
+                                transform: "scale(1)"
+                            });
+
+                        }, index * 160);
+
+                    });
+
+                });
+            }
+
+            video.onended = function () {
+                startGallery();
+            };
+
+            setTimeout(function () {
+
+                if ($("#InitalVideo_onetime").length > 0) {
+
+                    startGallery();
+                }
+
+            }, 18500);
+
+            document.body.addEventListener('click', function () {
+
+                video.play();
+
+            }, { once: true });
+        });
+
+        const modal = document.getElementById("imageModal");
+
+        const modalImg = document.getElementById("modalImg");
+
+        document.querySelectorAll(".collage_grid img").forEach(img => {
+
+            img.addEventListener("click", () => {
+
+                modal.style.display = "flex";
+
+                modalImg.src = img.src;
+            });
+        });
+
+        document.querySelector(".closeModal").addEventListener("click", () => {
+
+            modal.style.display = "none";
+        });
+
+        modal.addEventListener("click", (e) => {
+
+            if (e.target === modal) {
+
+                modal.style.display = "none";
+            }
+        });
+
+    </script>
+
+</body>
+
+</html>
